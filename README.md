@@ -12,6 +12,7 @@ pnpm add fly-io-api
 
 ```sh
 pnpm i
+# Hack...
 pnpm format
 pnpm lint
 pnpm test
