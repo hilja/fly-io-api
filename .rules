@@ -1,0 +1,31 @@
+# fly-io-api
+TypeScript package to interact with Fly.io machines api.
+
+## Tech stack
+- Language: TypeScript (tsgo)
+- Runtime: Node >=24.14.0
+- Linting: oxlint, oxfmt, oxlint-tsgolint
+- Package manager: pnpm
+
+## Key rules
+- Never touch files outside the current project directory
+- Tight but readable code
+- Variables: short but descriptive, camelCase with auxiliary verbs (isLoading, hasError)
+- Always comment exported functions and lines with more complex logic
+- Do not end comments with a period
+
+## When Stuck
+- Ask before making architectural changes
+- Always run `pnpm lint`
+
+## Project structure
+- Main file: `index.ts`
+- Tests: `index.test.ts`
+
+## Testing instructions
+Vitest
+
+### Running tests
+```bash
+pnpm test --run
+```
