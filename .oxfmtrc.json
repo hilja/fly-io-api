@@ -8,9 +8,7 @@
   "semi": false,
   "singleQuote": true,
   "trailingComma": "es5",
-  "sortImports": {
-    "internalPattern": ["#"]
-  },
+  "sortImports": true,
   "sortPackageJson": {
     "sortScripts": true
   },
