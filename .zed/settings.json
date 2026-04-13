@@ -62,7 +62,12 @@
       ]
     },
     "JSON": {
-      "language_servers": ["oxfmt", "oxlint", "json-language-server"],
+      "language_servers": [
+        "oxfmt",
+        "oxlint",
+        "json-language-server",
+        "codebook"
+      ],
       "format_on_save": "on",
       "prettier": { "allowed": false },
       "formatter": [
@@ -71,7 +76,12 @@
       ]
     },
     "JSONC": {
-      "language_servers": ["oxfmt", "oxlint", "json-language-server"],
+      "language_servers": [
+        "oxfmt",
+        "oxlint",
+        "json-language-server",
+        "codebook"
+      ],
       "format_on_save": "on",
       "prettier": { "allowed": false },
       "formatter": [
