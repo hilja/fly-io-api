@@ -1,9 +1,3 @@
 packageManagerStrictVersion: true
 saveExact: true
 minimumReleaseAge: 1440
-
-# minimumReleaseAgeExclude:
-#   - '@typescript/native-preview*'
-# dedupePeerDependents: false
-# allowBuilds:
-#   esbuild: true
