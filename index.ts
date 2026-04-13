@@ -26,7 +26,7 @@ export class Machine {
    * List all Machines associated with a specific app, with optional filters for
    * including deleted Machines and filtering by region.
    *
-   * @see {@link https://fly.io/docs/machines/api/machines-resource/#list-machines}
+   * @see {@link https://fly.io/docs/machines/api/machines-resource/#list-machines | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-list/ | Fly CLI docs}
    */
   async list<TSummary extends boolean = false>(
