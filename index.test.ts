@@ -14,6 +14,8 @@ import memoryFixture from './fixtures/machines/memory.json' with { type: 'json' 
 import processFixture from './fixtures/machines/process.json' with { type: 'json' }
 import { Machine } from './index.ts'
 
+const machineId = '86de8f0e6e0890'
+
 describe('Machine', () => {
   let machine: Machine
   let mockFetch: ReturnType<typeof vi.fn>
@@ -72,7 +74,7 @@ describe('Machine', () => {
     it('returns machine by id', async () => {
       mockSuccessResponse(machineFixture)
 
-      const result = await machine.get({ machineId: '86de8f0e6e0890' })
+      const result = await machine.get({ machineId })
 
       expect(result).toEqual(machineFixture)
     })
@@ -95,7 +97,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.waitFor({
-        machineId: '86de8f0e6e0890',
+        machineId,
         instance_id: 'ins_abc123',
         state: 'started',
       })
@@ -109,7 +111,7 @@ describe('Machine', () => {
       mockSuccessResponse(machineFixture)
 
       const result = await machine.update({
-        machineId: '86de8f0e6e0890',
+        machineId,
         config: { image: 'registry.fly.io/app-name:v2' },
       })
 
@@ -121,7 +123,7 @@ describe('Machine', () => {
     it('suspends a machine', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.suspend({ machineId: '86de8f0e6e0890' })
+      const result = await machine.suspend({ machineId })
 
       expect(result).toEqual({ ok: true })
     })
@@ -131,7 +133,7 @@ describe('Machine', () => {
     it('stops a machine', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.stop({ machineId: '86de8f0e6e0890' })
+      const result = await machine.stop({ machineId })
 
       expect(result).toEqual({ ok: true })
     })
@@ -140,7 +142,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.stop({
-        machineId: '86de8f0e6e0890',
+        machineId,
         signal: 'SIGTERM',
       })
 
@@ -153,7 +155,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.signal({
-        machineId: '86de8f0e6e0890',
+        machineId,
         signal: 'SIGINT',
       })
 
@@ -165,7 +167,7 @@ describe('Machine', () => {
     it('starts a machine', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.start({ machineId: '86de8f0e6e0890' })
+      const result = await machine.start({ machineId })
 
       expect(result).toEqual({ ok: true })
     })
@@ -175,7 +177,7 @@ describe('Machine', () => {
     it('restarts a machine', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.restart({ machineId: '86de8f0e6e0890' })
+      const result = await machine.restart({ machineId })
 
       expect(result).toEqual({ ok: true })
     })
@@ -185,7 +187,7 @@ describe('Machine', () => {
     it('deletes a machine', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.delete({ machineId: '86de8f0e6e0890' })
+      const result = await machine.delete({ machineId })
 
       expect(result).toEqual({ ok: true })
     })
@@ -195,10 +197,7 @@ describe('Machine', () => {
     it('creates a lease', async () => {
       mockSuccessResponse(leaseFixture)
 
-      const result = await machine.createLease({
-        machineId: '86de8f0e6e0890',
-        ttl: 3600,
-      })
+      const result = await machine.createLease({ machineId, ttl: 3600 })
 
       expect(result).toEqual(leaseFixture)
     })
@@ -208,7 +207,7 @@ describe('Machine', () => {
     it('gets a lease', async () => {
       mockSuccessResponse(leaseFixture)
 
-      const result = await machine.getLease({ machineId: '86de8f0e6e0890' })
+      const result = await machine.getLease({ machineId })
 
       expect(result).toEqual(leaseFixture)
     })
@@ -219,7 +218,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.releaseLease({
-        machineId: '86de8f0e6e0890',
+        machineId,
         nonce: 'nonce_abc123',
       })
 
@@ -231,7 +230,7 @@ describe('Machine', () => {
     it('cordons a machine', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.cordon({ machineId: '86de8f0e6e0890' })
+      const result = await machine.cordon({ machineId })
 
       expect(result).toEqual({ ok: true })
     })
@@ -241,7 +240,7 @@ describe('Machine', () => {
     it('uncordons a machine', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.uncordon({ machineId: '86de8f0e6e0890' })
+      const result = await machine.uncordon({ machineId })
 
       expect(result).toEqual({ ok: true })
     })
@@ -251,7 +250,7 @@ describe('Machine', () => {
     it('gets machine metadata', async () => {
       mockSuccessResponse({ app: 'my-app' })
 
-      const result = await machine.getMetadata({ machineId: '86de8f0e6e0890' })
+      const result = await machine.getMetadata({ machineId })
 
       expect(result).toEqual({ app: 'my-app' })
     })
@@ -262,7 +261,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.setMetadata({
-        machineId: '86de8f0e6e0890',
+        machineId,
         key: 'env',
         value: { env: 'prod' },
       })
@@ -276,7 +275,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.updateMetadata({
-        machineId: '86de8f0e6e0890',
+        machineId,
         metadata: { env: 'prod' },
         updated_at: '2024-01-15T12:00:00.000Z',
       })
@@ -290,7 +289,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.upsertMetadata({
-        machineId: '86de8f0e6e0890',
+        machineId,
         key: 'env',
         value: 'prod',
         updated_at: '2024-01-15T12:00:00.000Z',
@@ -305,7 +304,7 @@ describe('Machine', () => {
       mockSuccessResponse({ ok: true })
 
       const result = await machine.deleteMetadata({
-        machineId: '86de8f0e6e0890',
+        machineId,
         key: 'env',
         value: { env: 'prod' },
       })
@@ -318,9 +317,7 @@ describe('Machine', () => {
     it('lists machine processes', async () => {
       mockSuccessResponse(processFixture)
 
-      const result = await machine.listProcesses({
-        machineId: '86de8f0e6e0890',
-      })
+      const result = await machine.listProcesses({ machineId })
 
       expect(result).toEqual(processFixture)
     })
@@ -330,7 +327,7 @@ describe('Machine', () => {
     it('lists machine events', async () => {
       mockSuccessResponse(machineEventsFixture)
 
-      const result = await machine.listEvents({ machineId: '86de8f0e6e0890' })
+      const result = await machine.listEvents({ machineId })
 
       expect(result).toEqual(machineEventsFixture)
     })
@@ -340,7 +337,7 @@ describe('Machine', () => {
     it('gets machine memory info', async () => {
       mockSuccessResponse(memoryFixture)
 
-      const result = await machine.getMemory({ machineId: '86de8f0e6e0890' })
+      const result = await machine.getMemory({ machineId })
 
       expect(result).toEqual(memoryFixture)
     })
@@ -350,10 +347,7 @@ describe('Machine', () => {
     it('sets machine memory', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.setMemory({
-        machineId: '86de8f0e6e0890',
-        limit_mb: 512,
-      })
+      const result = await machine.setMemory({ machineId, limit_mb: 512 })
 
       expect(result).toEqual({ ok: true })
     })
@@ -363,10 +357,7 @@ describe('Machine', () => {
     it('reclaims machine memory', async () => {
       mockSuccessResponse({ ok: true })
 
-      const result = await machine.reclaimMemory({
-        machineId: '86de8f0e6e0890',
-        amount_mb: 128,
-      })
+      const result = await machine.reclaimMemory({ machineId, amount_mb: 128 })
 
       expect(result).toEqual({ ok: true })
     })
@@ -377,7 +368,7 @@ describe('Machine', () => {
       mockSuccessResponse({ exit_code: 0 })
 
       const result = await machine.exec({
-        machineId: '86de8f0e6e0890',
+        machineId,
         cmd: '/bin/sh -c "echo hello"',
       })
 
@@ -389,7 +380,7 @@ describe('Machine', () => {
     it('lists machine versions', async () => {
       mockSuccessResponse([{ version: 1 }])
 
-      const result = await machine.listVersions({ machineId: '86de8f0e6e0890' })
+      const result = await machine.listVersions({ machineId })
 
       expect(result).toEqual([{ version: 1 }])
     })
