@@ -1,0 +1,19 @@
+{
+  "ps": [
+    {
+      "pid": 1,
+      "command": "/app/server",
+      "cpu": 0.15,
+      "memory": 52428800,
+      "created": 1705315800
+    },
+    {
+      "pid": 42,
+      "command": "/app/worker",
+      "cpu": 0.08,
+      "memory": 31457280,
+      "created": 1705315900
+    }
+  ],
+  "total": 2
+}

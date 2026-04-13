@@ -1,0 +1,7 @@
+{
+  "message": "Invalid request parameters",
+  "fields": {
+    "image": ["Image is required"],
+    "region": ["Region must be a valid string"]
+  }
+}

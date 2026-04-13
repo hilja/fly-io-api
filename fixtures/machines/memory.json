@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "memory": {
+    "pss_mb": 128,
+    "rss_mb": 256,
+    "used_mb": 256,
+    "free_mb": 0,
+    "total_mb": 512,
+    "oversize": false
+  },
+  "raw": {
+    "total": 536870912,
+    "available": 0,
+    "used": 268435456,
+    "free": 0,
+    "buffers": 0,
+    "cached": 0
+  }
+}

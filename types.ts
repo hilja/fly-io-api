@@ -705,3 +705,55 @@ export interface MachineVersionRes {
   user_config?: ApiMachineConfig
   version?: string
 }
+
+// ============================================
+// Error types
+// ============================================
+
+/** Error thrown when the server returns a 4xx or 5xx response. */
+export class FlyApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public body: unknown
+  ) {
+    super(message)
+    this.name = 'FlyApiError'
+  }
+}
+
+/** 400 Bad Request - Invalid request parameters or body */
+export interface BadRequestError {
+  message: string
+  fields?: Record<string, string[]>
+}
+
+/** 401 Unauthorized - Invalid or missing token */
+export interface UnauthorizedError {
+  message: string
+}
+
+/** 404 Not Found - Machine or resource not found */
+export interface NotFoundError {
+  message: string
+}
+
+/** 409 Conflict - Resource conflict (e.g., lease held by another process) */
+export interface ConflictError {
+  message: string
+}
+
+/** 412 Precondition Failed - Version mismatch on optimistic locking */
+export interface PreconditionFailedError {
+  message: string
+}
+
+/** 429 Too Many Requests - Rate limit exceeded */
+export interface RateLimitError {
+  message: string
+}
+
+/** 500 Internal Server Error - Server-side error */
+export interface InternalServerError {
+  message: string
+}

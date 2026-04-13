@@ -27,6 +27,6 @@
     "target": "ESNext",
 
     // 3rd party Types
-    "types": ["node", "vite/client", "vitest/importMeta"]
+    "types": ["node", "vite/client", "vitest/importMeta", "vitest/globals"]
   }
 }

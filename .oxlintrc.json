@@ -71,7 +71,7 @@
     "import/no-cycle": "error",
     "import/no-empty-named-blocks": "error",
     "import/no-self-import": "error",
-    "import/unambiguous": "error",
+    "import/unambiguous": "off",
     "oxc/branches-sharing-code": "error",
     "oxc/misrefactored-assign-op": "error",
     "oxc/no-accumulating-spread": "error",

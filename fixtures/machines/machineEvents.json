@@ -1,0 +1,45 @@
+[
+  {
+    "id": "01HN8XYZ3ABC",
+    "type": "launch",
+    "timestamp": "2024-01-15T10:30:00.000Z",
+    "request": {}
+  },
+  {
+    "id": "01HN8XYZ4DEF",
+    "type": "start",
+    "timestamp": "2024-01-15T10:30:05.000Z",
+    "request": {}
+  },
+  {
+    "id": "01HN8XYZ5GHI",
+    "type": "stop",
+    "timestamp": "2024-01-15T12:00:00.000Z",
+    "request": {
+      "signal": "SIGTERM",
+      "timeout": "10s"
+    }
+  },
+  {
+    "id": "01HN8XYZ6JKL",
+    "type": "exit",
+    "timestamp": "2024-01-15T12:00:10.000Z",
+    "request": {},
+    "exit_event": {
+      "exit_code": 0,
+      "guest_exit_code": 0,
+      "guest_signal": 0,
+      "oom_killed": false,
+      "exit_signal": "SIGTERM",
+      "totaltime": 3600000000000
+    }
+  },
+  {
+    "id": "01HN8XYZ7MNO",
+    "type": "restart",
+    "timestamp": "2024-01-15T12:30:00.000Z",
+    "request": {
+      "timeout": "30s"
+    }
+  }
+]
