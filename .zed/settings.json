@@ -1,12 +1,6 @@
 {
   "project_name": "fly-io-api",
   "lsp": {
-    "tsgo": {
-      "settings": {
-        // Same as in workspace root package.json
-        "package_version": "7.0.0-dev.20260411.1"
-      }
-    },
     "oxlint": {
       "initialization_options": {
         "settings": {
@@ -37,7 +31,13 @@
       "formatter": [{ "language_server": { "name": "oxfmt" } }]
     },
     "TypeScript": {
-      "language_servers": ["tsgo", "oxlint", "oxfmt", "codebook"],
+      "language_servers": [
+        "typescript-language-server",
+        "!vtsls",
+        "oxlint",
+        "oxfmt",
+        "codebook"
+      ],
       "format_on_save": "on",
       "prettier": { "allowed": false },
       "formatter": [
@@ -46,7 +46,13 @@
       ]
     },
     "JavaScript": {
-      "language_servers": ["tsgo", "oxlint", "oxfmt", "codebook"],
+      "language_servers": [
+        "typescript-language-server",
+        "!vtsls",
+        "oxlint",
+        "oxfmt",
+        "codebook"
+      ],
       "format_on_save": "on",
       "prettier": { "allowed": false },
       "formatter": [
