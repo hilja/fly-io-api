@@ -1,17 +1,293 @@
-import type {
-  CheckStatus as ApiCheckStatus,
-  ImageRef as ApiImageRef,
-  Machine as ApiMachine,
-  ApiMachineCheck,
-  ApiMachineConfig,
-  ApiMachineGuest,
-  ApiMachineInit,
-  ApiMachineMount,
-  ApiMachinePort,
-  ApiMachineRestart,
-  ApiMachineService,
-  WaitState,
-} from './fly.types.ts'
+/**
+ * @file Some of the types were ripped from the `fly-admin` package, and
+ *   modified heavily by me.
+ * @see {@link https://github.com/supabase/fly-admin}
+ */
+
+export type WaitState = 'started' | 'stopped' | 'destroyed' | 'suspended'
+
+export interface ApiMachineServiceConcurrency {
+  hard_limit?: number
+  soft_limit?: number
+  type?: string
+}
+
+export interface ApiMachineService {
+  autostart?: boolean
+  autostop?: boolean
+  checks?: ApiMachineCheck[]
+  concurrency?: ApiMachineServiceConcurrency
+  force_instance_description?: string
+  force_instance_key?: string
+  internal_port?: number
+  min_machines_running?: number
+  ports?: ApiMachinePort[]
+  protocol?: string
+}
+
+/**
+ * - No - Never try to restart a Machine automatically when its main process
+ *   exits, whether that’s on purpose or on a crash.
+ * - Always - Always restart a Machine automatically and never let it enter a
+ *   stopped state, even when the main process exits cleanly.
+ * - On-failure - Try up to MaxRetries times to automatically restart the Machine
+ *   if it exits with a non-zero exit code. Default when no explicit policy is
+ *   set, and for Machines with schedules.
+ */
+export type ApiMachineRestartPolicyEnum = 'no' | 'always' | 'on-failure'
+
+/**
+ * The Machine restart policy defines whether and how flyd restarts a Machine
+ * after its main process exits. See
+ * https://fly.io/docs/machines/guides-examples/machine-restart-policy/.
+ */
+export interface ApiMachineRestart {
+  /**
+   * When policy is on-failure, the maximum number of times to attempt to
+   * restart the Machine before letting it stop.
+   */
+  max_retries?: number
+  /**
+   * - No - Never try to restart a Machine automatically when its main process
+   *   exits, whether that’s on purpose or on a crash.
+   * - Always - Always restart a Machine automatically and never let it enter a
+   *   stopped state, even when the main process exits cleanly.
+   * - On-failure - Try up to MaxRetries times to automatically restart the
+   *   Machine if it exits with a non-zero exit code. Default when no explicit
+   *   policy is set, and for Machines with schedules.
+   */
+  policy?: ApiMachineRestartPolicyEnum
+}
+
+export interface ApiProxyProtoOptions {
+  version?: string
+}
+
+export interface ApiHTTPOptions {
+  compress?: boolean
+  h2_backend?: boolean
+  response?: ApiHTTPResponseOptions
+}
+
+export interface ApiHTTPResponseOptions {
+  headers?: Record<string, any>
+}
+
+export interface ApiTLSOptions {
+  alpn?: string[]
+  default_self_signed?: boolean
+  versions?: string[]
+}
+
+export interface ApiMachinePort {
+  end_port?: number
+  force_https?: boolean
+  handlers?: string[]
+  http_options?: ApiHTTPOptions
+  port?: number
+  proxy_proto_options?: ApiProxyProtoOptions
+  start_port?: number
+  tls_options?: ApiTLSOptions
+}
+
+export interface ApiMachineMount {
+  add_size_gb?: number
+  encrypted?: boolean
+  extend_threshold_percent?: number
+  name?: string
+  path?: string
+  size_gb?: number
+  size_gb_limit?: number
+  volume?: string
+}
+
+interface ApiCheckStatus {
+  name?: string
+  output?: string
+  status?: string
+  updated_at?: string
+}
+
+interface ApiImageRef {
+  digest?: string
+  labels?: Record<string, string>
+  registry?: string
+  repository?: string
+  tag?: string
+}
+
+export interface ApiDNSConfig {
+  skip_registration?: boolean
+}
+
+/**
+ * A file that will be written to the Machine. One of RawValue or SecretName
+ * must be set.
+ */
+export interface ApiFile {
+  /**
+   * GuestPath is the path on the machine where the file will be written and
+   * must be an absolute path. For example: /full/path/to/file.json
+   */
+  guest_path?: string
+  /** The base64 encoded string of the file contents. */
+  raw_value?: string
+  /** The name of the secret that contains the base64 encoded file contents. */
+  secret_name?: string
+}
+
+export interface ApiMachineMetrics {
+  path?: string
+  port?: number
+}
+
+export interface ApiMachineProcess {
+  cmd?: string[]
+  entrypoint?: string[]
+  env?: Record<string, string>
+  exec?: string[]
+  user?: string
+}
+
+export interface ApiStatic {
+  guest_path: string
+  url_prefix: string
+}
+
+export interface ApiStopConfig {
+  signal?: string
+  timeout?: string
+}
+
+export interface ApiMachineGuest {
+  cpu_kind?: string
+  cpus?: number
+  gpu_kind?: string
+  host_dedication_id?: string
+  kernel_args?: string[]
+  memory_mb?: number
+}
+
+export interface ApiMachineInit {
+  cmd?: string[]
+  entrypoint?: string[]
+  exec?: string[]
+  kernel_args?: string[]
+  swap_size_mb?: number
+  tty?: boolean
+}
+
+export interface ApiMachineConfig {
+  /**
+   * Optional boolean telling the Machine to destroy itself once it’s complete
+   * (default false)
+   */
+  auto_destroy?: boolean
+  checks?: Record<string, ApiMachineCheck>
+  /** Deprecated: use Service.Autostart instead */
+  disable_machine_autostart?: boolean
+  dns?: ApiDNSConfig
+  /** An object filled with key/value pairs to be set as environment variables */
+  env?: Record<string, string>
+  files?: ApiFile[]
+  guest?: ApiMachineGuest
+  /** The docker image to run */
+  image?: string
+  init?: ApiMachineInit
+  metadata?: Record<string, string>
+  metrics?: ApiMachineMetrics
+  mounts?: ApiMachineMount[]
+  processes?: ApiMachineProcess[]
+  /**
+   * The Machine restart policy defines whether and how flyd restarts a Machine
+   * after its main process exits. See
+   * https://fly.io/docs/machines/guides-examples/machine-restart-policy/.
+   */
+  restart?: ApiMachineRestart
+  schedule?: string
+  services?: ApiMachineService[]
+  /** Deprecated: use Guest instead */
+  size?: string
+  /**
+   * Standbys enable a machine to be a standby for another. In the event of a
+   * hardware failure, the standby machine will be started.
+   */
+  standbys?: string[]
+  statics?: ApiStatic[]
+  stop_config?: ApiStopConfig
+}
+
+interface ApiMachine {
+  // TODO: should this be here?
+  checks?: CheckStatus[]
+  config?: ApiMachineConfig
+  created_at?: string
+  events?: MachineEvent[]
+  id?: string
+  image_ref?: ApiImageRef
+  /** InstanceID is unique for each version of the machine */
+  instance_id?: string
+  name?: string
+  /**
+   * Nonce is only every returned on machine creation if a lease_duration was
+   * provided.
+   */
+  nonce?: string
+  /** PrivateIP is the internal 6PN address of the machine. */
+  private_ip?: string
+  region?: string
+  state?: string
+  updated_at?: string
+}
+
+/**
+ * For http checks, an array of objects with string field Name and array of
+ * strings field Values. The key/value pairs specify header and header values
+ * that will get passed with the check call.
+ */
+export interface ApiMachineHTTPHeader {
+  /** The header name */
+  name?: string
+  /** The header value */
+  values?: string[]
+}
+
+/**
+ * An optional object that defines one or more named checks. The key for each
+ * check is the check name.
+ */
+export interface ApiMachineCheck {
+  /** The time to wait after a VM starts before checking its health */
+  grace_period?: string
+  headers?: ApiMachineHTTPHeader[]
+  /** The time between connectivity checks */
+  interval?: string
+  /** For http checks, the HTTP method to use to when making the request */
+  method?: string
+  /** For http checks, the path to send the request to */
+  path?: string
+  /** The port to connect to, often the same as internal_port */
+  port?: number
+  /** For http checks, whether to use http or https */
+  protocol?: string
+  /**
+   * The maximum time a connection can take before being reported as failing its
+   * health check
+   */
+  timeout?: string
+  /**
+   * If the protocol is https, the hostname to use for TLS certificate
+   * validation
+   */
+  tls_server_name?: string
+  /**
+   * For http checks with https protocol, whether or not to verify the TLS
+   * certificate
+   */
+  tls_skip_verify?: boolean
+  /** Tcp or http */
+  type?: string
+}
 
 // oxfmt-ignore
 export type Signal =

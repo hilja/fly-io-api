@@ -1,57 +1,15 @@
-import type {
-  CordonMachineReq,
-  CreateLeaseReq,
-  CreateMachineReq,
-  DeleteLeaseReq,
-  DeleteMachineMetadataReq,
-  DeleteMachineReq,
-  Endpoints,
-  ExecMachineReq,
-  ExecMachineRes,
-  GetLeaseReq,
-  GetMachineReq,
-  GetMemoryReq,
-  GetMetadataMachineReq,
-  GetMetadataRes,
-  LeaseRes,
-  ListEventsReq,
-  ListMachineReq,
-  ListMachineVersionsReq,
-  ListProcessesReq,
-  ListRes,
-  MachineConfig,
-  MachineRes,
-  MachineVersionRes,
-  MemoryRes,
-  OkRes,
-  ProcessRes,
-  ReclaimMemoryReq,
-  ReclaimMemoryRes,
-  RestartMachineReq,
-  SetMemoryReq,
-  SetMetadataMachineReq,
-  SignalMachineReq,
-  StartMachineReq,
-  StopMachineReq,
-  SuspendMachineReq,
-  UncordonMachineReq,
-  UpdateMachineReq,
-  UpdateMetadataMachineReq,
-  UpsertMetadataMachineReq,
-  WaitMachineReq,
-} from './fly.types.machine.ts'
-import type { MachineEvent } from './fly.types.ts'
+import type * as T from './types.ts'
 
 export type PostBody =
-  | MachineConfig
-  | Omit<UpdateMachineReq, 'config' | 'machineId'>
-  | Omit<CreateLeaseReq, 'machineId'>
-  | Omit<StopMachineReq, 'machineId'>
-  | Omit<ExecMachineReq, 'machineId'>
-  | Omit<UpdateMetadataMachineReq, 'machineId'>
-  | Omit<UpsertMetadataMachineReq, 'machineId' | 'key'>
-  | Omit<SetMemoryReq, 'machineId'>
-  | Omit<ReclaimMemoryReq, 'machineId'>
+  | T.MachineConfig
+  | Omit<T.UpdateMachineReq, 'config' | 'machineId'>
+  | Omit<T.CreateLeaseReq, 'machineId'>
+  | Omit<T.StopMachineReq, 'machineId'>
+  | Omit<T.ExecMachineReq, 'machineId'>
+  | Omit<T.UpdateMetadataMachineReq, 'machineId'>
+  | Omit<T.UpsertMetadataMachineReq, 'machineId' | 'key'>
+  | Omit<T.SetMemoryReq, 'machineId'>
+  | Omit<T.ReclaimMemoryReq, 'machineId'>
 
 export class Machine {
   token: string
@@ -71,8 +29,8 @@ export class Machine {
    * @see {@link https://fly.io/docs/flyctl/machine-list/ | Fly CLI docs}
    */
   list<TSummary extends boolean = false>(
-    args?: ListMachineReq<TSummary>
-  ): Promise<ListRes<TSummary>[]> {
+    args?: T.ListMachineReq<TSummary>
+  ): Promise<T.ListRes<TSummary>[]> {
     const params = new URLSearchParams()
 
     if (typeof args !== 'undefined') {
@@ -91,7 +49,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#get-a-machine | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-list/ | Fly CLI docs}
    */
-  get({ machineId }: GetMachineReq): Promise<MachineRes> {
+  get({ machineId }: T.GetMachineReq): Promise<T.MachineRes> {
     return this.#fetch(this.#get({ machineId }))
   }
 
@@ -102,10 +60,10 @@ export class Machine {
    * Create a Machine without booting it by setting `skip_launch`.
    *
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#create-a-machine | Fly API docs}
-   * @see {@link https://fly.io/docs/machines/api/machines-resource/#create-a-machine-with-services | Fly API docs}
+   * @see {@link https://fly.io/docs/machines/api/machines-resource/#create-a-machine-with-services | Fly API docs 2}
    * @see {@link https://fly.io/docs/flyctl/machine-create/ | Fly CLI docs}
    */
-  create({ config }: CreateMachineReq): Promise<MachineRes> {
+  create({ config }: T.CreateMachineReq): Promise<T.MachineRes> {
     return this.#fetch(this.#post({ body: config }))
   }
 
@@ -115,7 +73,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#wait-for-a-machine-to-reach-a-specified-state | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-wait/ | Fly CLI docs}
    */
-  waitFor({ machineId, ...args }: WaitMachineReq): Promise<OkRes> {
+  waitFor({ machineId, ...args }: T.WaitMachineReq): Promise<T.OkRes> {
     const params = new URLSearchParams()
     for (const [key, val] of Object.entries(args)) {
       params.append(key, this.#getVal(val))
@@ -133,7 +91,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#update-a-machine | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-update/ | Fly CLI docs}
    */
-  update({ machineId, ...body }: UpdateMachineReq): Promise<MachineRes> {
+  update({ machineId, ...body }: T.UpdateMachineReq): Promise<T.MachineRes> {
     return this.#fetch(this.#post({ machineId, body }))
   }
 
@@ -146,7 +104,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#suspend-a-machine | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-suspend/ | Fly CLI docs}
    */
-  suspend({ machineId }: SuspendMachineReq): Promise<OkRes> {
+  suspend({ machineId }: T.SuspendMachineReq): Promise<T.OkRes> {
     const req = this.#post({ machineId, endpoint: 'suspend' })
     return this.#fetch(req)
   }
@@ -161,7 +119,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#stop-a-machine | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-stop/ | Fly CLI docs}
    */
-  stop({ machineId, signal, timeout }: StopMachineReq): Promise<OkRes> {
+  stop({ machineId, signal, timeout }: T.StopMachineReq): Promise<T.OkRes> {
     const req = this.#post({
       body: {
         ...(signal && { signal }),
@@ -179,7 +137,7 @@ export class Machine {
    *
    * @see {@link https://docs.machines.dev | Fly OpenAPI docs}
    */
-  signal({ machineId, signal }: SignalMachineReq): Promise<OkRes> {
+  signal({ machineId, signal }: T.SignalMachineReq): Promise<T.OkRes> {
     return this.#fetch(
       this.#post({ body: { signal }, endpoint: 'signal', machineId })
     )
@@ -199,7 +157,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#start-a-machine | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-start/ | Fly CLI docs}
    */
-  start({ machineId }: StartMachineReq): Promise<OkRes> {
+  start({ machineId }: T.StartMachineReq): Promise<T.OkRes> {
     return this.#fetch(this.#post({ endpoint: 'start', machineId }))
   }
 
@@ -210,7 +168,7 @@ export class Machine {
    * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    * @see {@link https://fly.io/docs/flyctl/machine-restart/ | Fly CLI docs}
    */
-  restart({ machineId }: RestartMachineReq): Promise<OkRes> {
+  restart({ machineId }: T.RestartMachineReq): Promise<T.OkRes> {
     return this.#fetch(this.#post({ endpoint: 'restart', machineId }))
   }
 
@@ -220,7 +178,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#delete-a-machine-permanently | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-delete/ | Fly CLI docs}
    */
-  delete({ machineId, force }: DeleteMachineReq): Promise<OkRes> {
+  delete({ machineId, force }: T.DeleteMachineReq): Promise<T.OkRes> {
     const params = new URLSearchParams()
     if (force) params.append('force', this.#getVal(force))
 
@@ -239,7 +197,7 @@ export class Machine {
     machineId,
     ttl,
     description,
-  }: CreateLeaseReq): Promise<LeaseRes> {
+  }: T.CreateLeaseReq): Promise<T.LeaseRes> {
     return this.#fetch(
       this.#post({ body: { ttl, description }, endpoint: 'lease', machineId })
     )
@@ -252,7 +210,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#get-a-machine-lease | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-lease/ | Fly CLI docs}
    */
-  getLease({ machineId }: GetLeaseReq): Promise<LeaseRes> {
+  getLease({ machineId }: T.GetLeaseReq): Promise<T.LeaseRes> {
     return this.#fetch(this.#get({ endpoint: 'lease', machineId }))
   }
 
@@ -263,7 +221,7 @@ export class Machine {
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#release-a-machine-lease | Fly API docs}
    * @see {@link https://fly.io/docs/flyctl/machine-lease/ | Fly CLI docs}
    */
-  releaseLease({ machineId, nonce }: DeleteLeaseReq): Promise<LeaseRes> {
+  releaseLease({ machineId, nonce }: T.DeleteLeaseReq): Promise<T.LeaseRes> {
     const headers = new Headers({ nonce })
     return this.#fetch(this.#delete({ endpoint: 'lease', headers, machineId }))
   }
@@ -277,7 +235,7 @@ export class Machine {
    *
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#route-requests-away-from-or-back-to-a-machine | Fly API docs}
    */
-  cordon({ machineId }: CordonMachineReq): Promise<OkRes> {
+  cordon({ machineId }: T.CordonMachineReq): Promise<T.OkRes> {
     return this.#fetch(this.#post({ endpoint: 'cordon', machineId }))
   }
 
@@ -290,7 +248,7 @@ export class Machine {
    *
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#route-requests-away-from-or-back-to-a-machine | Fly API docs}
    */
-  uncordon({ machineId }: UncordonMachineReq): Promise<OkRes> {
+  uncordon({ machineId }: T.UncordonMachineReq): Promise<T.OkRes> {
     return this.#fetch(this.#post({ endpoint: 'uncordon', machineId }))
   }
 
@@ -299,7 +257,9 @@ export class Machine {
    *
    * @see {@link https://fly.io/docs/machines/api/machines-resource/#get-a-machines-metadata | Fly API docs}
    */
-  getMetadata({ machineId }: GetMetadataMachineReq): Promise<GetMetadataRes> {
+  getMetadata({
+    machineId,
+  }: T.GetMetadataMachineReq): Promise<T.GetMetadataRes> {
     return this.#fetch(this.#get({ endpoint: 'metadata', machineId }))
   }
 
@@ -312,7 +272,7 @@ export class Machine {
     machineId,
     key,
     value,
-  }: SetMetadataMachineReq): Promise<unknown> {
+  }: T.SetMetadataMachineReq): Promise<unknown> {
     return this.#fetch(
       this.#post({ body: value, endpoint: 'metadata', key, machineId })
     )
@@ -332,7 +292,7 @@ export class Machine {
     machine_version,
     metadata,
     updated_at,
-  }: UpdateMetadataMachineReq): Promise<unknown> {
+  }: T.UpdateMetadataMachineReq): Promise<unknown> {
     return this.#fetch(
       this.#post({
         body: { machine_version, metadata, updated_at },
@@ -356,7 +316,7 @@ export class Machine {
     key,
     updated_at,
     value,
-  }: UpsertMetadataMachineReq): Promise<unknown> {
+  }: T.UpsertMetadataMachineReq): Promise<unknown> {
     return this.#fetch(
       this.#post({
         machineId,
@@ -373,7 +333,10 @@ export class Machine {
    *
    * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    */
-  deleteMetadata({ machineId, key }: DeleteMachineMetadataReq): Promise<OkRes> {
+  deleteMetadata({
+    machineId,
+    key,
+  }: T.DeleteMachineMetadataReq): Promise<T.OkRes> {
     return this.#fetch(this.#delete({ endpoint: 'metadata', key, machineId }))
   }
 
@@ -387,7 +350,7 @@ export class Machine {
     machineId,
     sortBy,
     order,
-  }: ListProcessesReq): Promise<ProcessRes> {
+  }: T.ListProcessesReq): Promise<T.ProcessRes> {
     const params = new URLSearchParams()
     if (sortBy) params.append('sort_by', sortBy)
     if (order) params.append('order', order)
@@ -401,7 +364,7 @@ export class Machine {
    *
    * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    */
-  listEvents({ machineId }: ListEventsReq): Promise<MachineEvent> {
+  listEvents({ machineId }: T.ListEventsReq): Promise<T.MachineEvent> {
     return this.#fetch(this.#get({ endpoint: 'events', machineId }))
   }
 
@@ -410,7 +373,7 @@ export class Machine {
    *
    * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    */
-  getMemory({ machineId }: GetMemoryReq): Promise<MemoryRes> {
+  getMemory({ machineId }: T.GetMemoryReq): Promise<T.MemoryRes> {
     return this.#fetch(this.#get({ endpoint: 'memory', machineId }))
   }
 
@@ -419,7 +382,7 @@ export class Machine {
    *
    * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    */
-  setMemory({ machineId, limit_mb }: SetMemoryReq): Promise<MemoryRes> {
+  setMemory({ machineId, limit_mb }: T.SetMemoryReq): Promise<T.MemoryRes> {
     return this.#fetch(
       this.#post({
         body: { limit_mb },
@@ -438,7 +401,7 @@ export class Machine {
   reclaimMemory({
     machineId,
     amount_mb,
-  }: ReclaimMemoryReq): Promise<ReclaimMemoryRes> {
+  }: T.ReclaimMemoryReq): Promise<T.ReclaimMemoryRes> {
     return this.#fetch(
       this.#post({ body: { amount_mb }, endpoint: 'reclaim', machineId })
     )
@@ -458,7 +421,7 @@ export class Machine {
     machineId,
     stdin,
     timeout,
-  }: ExecMachineReq): Promise<ExecMachineRes> {
+  }: T.ExecMachineReq): Promise<T.ExecMachineRes> {
     return this.#fetch(
       this.#post({
         machineId,
@@ -476,7 +439,7 @@ export class Machine {
    */
   listVersions({
     machineId,
-  }: ListMachineVersionsReq): Promise<MachineVersionRes> {
+  }: T.ListMachineVersionsReq): Promise<T.MachineVersionRes> {
     return this.#fetch(this.#get({ endpoint: 'versions', machineId }))
   }
 
@@ -505,7 +468,7 @@ export class Machine {
     params,
   }: {
     machineId?: string
-    endpoint?: Endpoints
+    endpoint?: T.Endpoints
     key?: string
     params?: URLSearchParams
   }) {
@@ -540,7 +503,7 @@ export class Machine {
     machineId,
     params,
   }: {
-    endpoint?: Endpoints
+    endpoint?: T.Endpoints
     key?: string
     machineId?: string
     params?: URLSearchParams
@@ -557,7 +520,7 @@ export class Machine {
     machineId,
     params,
   }: {
-    endpoint?: Endpoints
+    endpoint?: T.Endpoints
     headers?: Headers
     key?: string
     machineId?: string
@@ -579,7 +542,7 @@ export class Machine {
     method = 'post',
   }: {
     body?: PostBody
-    endpoint?: Endpoints
+    endpoint?: T.Endpoints
     key?: string
     machineId?: string
     method?: 'post' | 'put'
