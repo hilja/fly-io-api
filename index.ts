@@ -399,7 +399,13 @@ export class Machine {
    *
    * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    */
-  async listEvents({ machineId }: T.ListEventsReq): Promise<T.MachineEvent> {
+  async listEvents({
+    machineId,
+    limit,
+  }: T.ListEventsReq): Promise<T.MachineEvent> {
+    const params = new URLSearchParams()
+    if (limit) params.set('limit', this.#getVal(limit))
+
     return this.#handleRes(
       await this.#fetch(this.#get({ endpoint: 'events', machineId }))
     )

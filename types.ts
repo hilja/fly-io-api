@@ -687,10 +687,14 @@ export interface ProcessRes {
 }
 
 // TODO: this should also take limit but the docs don't mention it
-// export interface ListEventsReq extends GetMachineReq {
-//   limit?: number
-// }
-export type ListEventsReq = GetMachineReq
+export interface ListEventsReq extends BaseMachineReq {
+  /**
+   * Max 50
+   *
+   * @default 20
+   */
+  limit?: number
+}
 
 export interface ExecMachineReq extends GetMachineReq {
   /** @deprecated Use `command` instead */
