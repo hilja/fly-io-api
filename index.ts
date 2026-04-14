@@ -291,19 +291,17 @@ export class Machine {
   }
 
   /**
-   * Add or update a metadata key-value pair on a specific Machine’s config.
+   * Get the value of a specific metadata key.
    *
-   * @see {@link https://fly.io/docs/machines/api/machines-resource/#add-or-update-machine-metadata | Fly API docs}
+   * @see {@link https://fly.io/docs/machines/api/machines-resource/#get-a-machines-metadata | Fly API docs}
+   * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    */
-  async setMetadata({
+  async getMetadataVal({
     machineId,
     key,
-    value,
-  }: T.SetMetadataMachineReq): Promise<unknown> {
+  }: T.GetMetadataValMachineReq): Promise<T.GetMetadataValMachineRes> {
     return this.#handleRes(
-      await this.#fetch(
-        this.#post({ body: value, endpoint: 'metadata', key, machineId })
-      )
+      await this.#fetch(this.#get({ endpoint: 'metadata', machineId, key }))
     )
   }
 

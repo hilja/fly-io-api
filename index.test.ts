@@ -256,17 +256,13 @@ describe('Machine', () => {
     })
   })
 
-  describe('setMetadata()', () => {
+  describe('getMetadataVal()', () => {
     it('sets machine metadata', async () => {
-      mockSuccessResponse({ ok: true })
+      mockSuccessResponse({ value: 'my-app' })
 
-      const result = await machine.setMetadata({
-        machineId,
-        key: 'env',
-        value: { env: 'prod' },
-      })
+      const result = await machine.getMetadataVal({ machineId, key: 'app' })
 
-      expect(result).toEqual({ ok: true })
+      expect(result).toEqual({ value: 'my-app' })
     })
   })
 

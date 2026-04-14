@@ -607,6 +607,14 @@ export type UncordonMachineReq = GetMachineReq
 
 export type GetMetadataMachineReq = GetMachineReq
 
+export interface GetMetadataValMachineReq extends GetMachineReq {
+  key: string
+}
+
+export interface GetMetadataValMachineRes {
+  value: string
+}
+
 export type GetMemoryReq = GetMachineReq
 
 export interface SetMemoryReq extends GetMachineReq {
@@ -646,11 +654,7 @@ export interface UpdateMetadataMachineReq extends GetMachineReq {
 export type DeleteMachineMetadataReq = SetMetadataMachineReq
 
 export interface GetMetadataRes {
-  fly_flyctl_version: string
-  fly_platform_version: string
-  fly_process_group: string
-  fly_release_id: string
-  fly_release_version: string
+  [key: string]: string
 }
 
 export type ListMachineVersionsReq = GetMachineReq
