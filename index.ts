@@ -192,11 +192,8 @@ export class Machine {
    * @see {@link https://fly.io/docs/flyctl/machine-delete/ | Fly CLI docs}
    */
   async delete({ machineId, force }: T.DeleteMachineReq): Promise<T.OkRes> {
-    const params = new URLSearchParams()
-    if (force) params.append('force', this.#getVal(force))
-
     return this.#handleRes(
-      await this.#fetch(this.#delete({ machineId, params }))
+      await this.#fetch(this.#delete({ machineId, force }))
     )
   }
 
@@ -573,17 +570,25 @@ export class Machine {
 
   #delete({
     endpoint,
+    force = false,
     headers,
     key,
     machineId,
-    params,
   }: {
     endpoint?: T.Endpoints
+    /**
+     * DELETE doesn't really have params, except `force`, which we can abstract
+     * into arg
+     *
+     * @default false
+     */
+    force?: boolean
     headers?: Headers
     key?: string
     machineId?: string
-    params?: URLSearchParams
   }) {
+    const params = new URLSearchParams()
+    if (force) params.append('force', this.#getVal(force))
     const url = this.#getUrl({ machineId, endpoint, key, params })
 
     return new Request(url, {
