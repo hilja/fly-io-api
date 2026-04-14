@@ -1,6 +1,6 @@
 {
   "name": "fly-io-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript package to interact with Fly.io machines api",
   "keywords": [
     "fly.io",
@@ -27,7 +27,7 @@
     "format": "oxfmt --write",
     "lint": "oxlint --type-check",
     "ncu": "pnpmx npm-check-updates --format=group,repo -i -p pnpm",
-    "pub": "pnpm build && (npm whoami || npm login) && pnpm publish --access=public --tag=latest",
+    "pub": "pnpm build && pnpm build && (npm whoami || npm login) && pnpm publish --access=public --tag=latest",
     "test": "vitest"
   },
   "devDependencies": {
