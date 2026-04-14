@@ -365,7 +365,7 @@ describe('Machine', () => {
 
       const result = await machine.exec({
         machineId,
-        cmd: '/bin/sh -c "echo hello"',
+        command: ['/bin/sh', '-c', '"echo hello"'],
       })
 
       expect(result).toEqual({ exit_code: 0 })
