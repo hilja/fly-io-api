@@ -1,5 +1,16 @@
 import type * as T from './types.ts'
-import { FlyApiError } from './types.ts'
+
+/** Error thrown when the server returns a 4xx or 5xx response. */
+export class FlyApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public body: unknown
+  ) {
+    super(message)
+    this.name = 'FlyApiError'
+  }
+}
 
 export type PostBody =
   | T.MachineConfig

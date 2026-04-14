@@ -721,18 +721,6 @@ export interface MachineVersionRes {
 // Error types
 // ============================================
 
-/** Error thrown when the server returns a 4xx or 5xx response. */
-export class FlyApiError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-    public body: unknown
-  ) {
-    super(message)
-    this.name = 'FlyApiError'
-  }
-}
-
 /** 400 Bad Request - Invalid request parameters or body */
 export interface BadRequestError {
   message: string
