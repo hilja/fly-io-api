@@ -472,20 +472,18 @@ export class Machine {
    * @see {@link https://docs.machines.dev/ | Fly OpenAPI docs}
    */
   async exec({
-    // oxlint-disable-next-line typescript/no-deprecated
-    cmd,
     command,
     container,
     machineId,
     stdin,
-    timeout,
+    timeout = 10,
   }: T.ExecMachineReq): Promise<T.ExecMachineRes> {
     return this.#handleRes(
       await this.#fetch(
         this.#post({
           machineId,
           endpoint: 'exec',
-          body: { cmd, command, container, stdin, timeout },
+          body: { command, container, stdin, timeout },
         })
       )
     )

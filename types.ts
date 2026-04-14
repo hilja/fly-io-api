@@ -688,7 +688,7 @@ export type ListEventsReq = GetMachineReq
 export interface ExecMachineReq extends GetMachineReq {
   /** @deprecated Use `command` instead */
   cmd?: string
-  command?: string[]
+  command: string[]
   container?: string
   stdin?: string
   timeout?: number
