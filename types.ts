@@ -26,11 +26,11 @@ export interface ApiMachineService {
 }
 
 /**
- * - No - Never try to restart a Machine automatically when its main process
+ * - `no`: Never try to restart a Machine automatically when its main process
  *   exits, whether that’s on purpose or on a crash.
- * - Always - Always restart a Machine automatically and never let it enter a
+ * - `always`: Always restart a Machine automatically and never let it enter a
  *   stopped state, even when the main process exits cleanly.
- * - On-failure - Try up to MaxRetries times to automatically restart the Machine
+ * - `on-failure`: Try up to MaxRetries times to automatically restart the Machine
  *   if it exits with a non-zero exit code. Default when no explicit policy is
  *   set, and for Machines with schedules.
  */
@@ -38,8 +38,9 @@ export type ApiMachineRestartPolicyEnum = 'no' | 'always' | 'on-failure'
 
 /**
  * The Machine restart policy defines whether and how flyd restarts a Machine
- * after its main process exits. See
- * https://fly.io/docs/machines/guides-examples/machine-restart-policy/.
+ * after its main process exits.
+ *
+ * @see {@link https://fly.io/docs/machines/guides-examples/machine-restart-policy/}
  */
 export interface ApiMachineRestart {
   /**
@@ -48,11 +49,11 @@ export interface ApiMachineRestart {
    */
   max_retries?: number
   /**
-   * - No - Never try to restart a Machine automatically when its main process
+   * - `no`: Never try to restart a Machine automatically when its main process
    *   exits, whether that’s on purpose or on a crash.
-   * - Always - Always restart a Machine automatically and never let it enter a
+   * - `always`: Always restart a Machine automatically and never let it enter a
    *   stopped state, even when the main process exits cleanly.
-   * - On-failure - Try up to MaxRetries times to automatically restart the
+   * - `on-failure`: Try up to MaxRetries times to automatically restart the
    *   Machine if it exits with a non-zero exit code. Default when no explicit
    *   policy is set, and for Machines with schedules.
    */
@@ -180,11 +181,12 @@ export interface ApiMachineInit {
 export interface ApiMachineConfig {
   /**
    * Optional boolean telling the Machine to destroy itself once it’s complete
-   * (default false)
+   *
+   * @default false
    */
   auto_destroy?: boolean
   checks?: Record<string, ApiMachineCheck>
-  /** Deprecated: use Service.Autostart instead */
+  /** @deprecated: use Service.Autostart instead */
   disable_machine_autostart?: boolean
   dns?: ApiDNSConfig
   /** An object filled with key/value pairs to be set as environment variables */
@@ -201,12 +203,13 @@ export interface ApiMachineConfig {
   /**
    * The Machine restart policy defines whether and how flyd restarts a Machine
    * after its main process exits. See
-   * https://fly.io/docs/machines/guides-examples/machine-restart-policy/.
+   *
+   * @see {@link https://fly.io/docs/machines/guides-examples/machine-restart-policy/}
    */
   restart?: ApiMachineRestart
   schedule?: string
   services?: ApiMachineService[]
-  /** Deprecated: use Guest instead */
+  /** @deprecated use Guest instead */
   size?: string
   /**
    * Standbys enable a machine to be a standby for another. In the event of a
@@ -229,11 +232,11 @@ interface ApiMachine {
   instance_id?: string
   name?: string
   /**
-   * Nonce is only every returned on machine creation if a lease_duration was
+   * `nonce` is only ever returned on machine creation if a `lease_duration` was
    * provided.
    */
   nonce?: string
-  /** PrivateIP is the internal 6PN address of the machine. */
+  /** `privateIP` is the internal 6PN address of the machine. */
   private_ip?: string
   region?: string
   state?: string
@@ -332,7 +335,7 @@ export type ListMachineReq<TSummary extends boolean> = {
   summary?: TSummary
 }
 
-// Ref: https://fly.io/docs/machines/api/machines-resource/#create-a-machine
+/** @see {@link https://fly.io/docs/machines/api/machines-resource/#create-a-machine} */
 export interface CreateMachineReq {
   config: MachineConfig
 }
@@ -457,10 +460,10 @@ export type MachineState =
 export interface MachineMount extends ApiMachineMount {
   encrypted: boolean
   name: string
-  // Absolute path on the VM where the volume should be mounted. i.e. /data
+  /** Absolute path on the VM where the volume should be mounted. i.e. /data */
   path: string
   size_gb: number
-  // The volume ID, visible in fly volumes list, i.e. vol_2n0l3vl60qpv635d
+  /** The volume ID, visible in fly volumes list, i.e. vol_2n0l3vl60qpv635d */
   volume: string
 }
 
@@ -539,7 +542,7 @@ export interface StopMachineReq extends RestartMachineReq {
   /**
    * Signal to stop the machine with. Default value: SIGINT
    *
-   * @defaultValue SIGINT
+   * @default SIGINT
    */
   signal?: Signal
 }
@@ -572,7 +575,7 @@ export interface UpdateMachineReq extends GetMachineReq {
 export interface WaitMachineReq extends GetMachineReq {
   instance_id: string
   state?: WaitState
-  // Default timeout is 60 (seconds)
+  /** @default 60 (seconds) */
   timeout?: string
 }
 
@@ -605,8 +608,6 @@ export type UncordonMachineReq = GetMachineReq
 export type GetMetadataMachineReq = GetMachineReq
 
 export type GetMemoryReq = GetMachineReq
-
-// export type ReclaimMemoryReq = GetMachineReq
 
 export interface SetMemoryReq extends GetMachineReq {
   limit_mb: number
