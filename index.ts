@@ -47,7 +47,7 @@ export class Machine {
 
     if (typeof args !== 'undefined') {
       for (const [key, val] of Object.entries(args)) {
-        params.append(key, this.#getVal(val))
+        params.append(key, this.#normalizeParam(val))
       }
     }
 
@@ -88,7 +88,7 @@ export class Machine {
   async waitFor({ machineId, ...args }: T.WaitMachineReq): Promise<T.OkRes> {
     const params = new URLSearchParams()
     for (const [key, val] of Object.entries(args)) {
-      params.append(key, this.#getVal(val))
+      params.append(key, this.#normalizeParam(val))
     }
 
     return this.#handleRes(
@@ -415,7 +415,7 @@ export class Machine {
     limit,
   }: T.ListEventsReq): Promise<T.MachineEvent> {
     const params = new URLSearchParams()
-    if (limit) params.set('limit', this.#getVal(limit))
+    if (limit) params.set('limit', this.#normalizeParam(limit))
 
     return this.#handleRes(
       await this.#fetch(this.#get({ endpoint: 'events', machineId }))
@@ -526,9 +526,10 @@ export class Machine {
     return res.json()
   }
 
-  #getVal(val: string | number | boolean) {
+  #normalizeParam(val: string | number | boolean) {
     val = typeof val === 'number' ? String(val) : val
-    return typeof val === 'boolean' ? (val === true ? 'true' : 'false') : val
+    val = typeof val === 'boolean' ? (val === true ? 'true' : 'false') : val
+    return val
   }
 
   #getUrl({
@@ -604,7 +605,7 @@ export class Machine {
     machineId?: string
   }) {
     const params = new URLSearchParams()
-    if (force) params.append('force', this.#getVal(force))
+    if (force) params.append('force', this.#normalizeParam(force))
     const url = this.#getUrl({ machineId, endpoint, key, params })
 
     return new Request(url, {
