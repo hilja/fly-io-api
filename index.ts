@@ -515,7 +515,8 @@ export class Machine {
     return res.json()
   }
 
-  #getVal(val: string | boolean) {
+  #getVal(val: string | number | boolean) {
+    val = typeof val === 'number' ? String(val) : val
     return typeof val === 'boolean' ? (val === true ? 'true' : 'false') : val
   }
 
