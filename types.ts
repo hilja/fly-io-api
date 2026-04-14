@@ -528,15 +528,18 @@ export interface CheckStatus extends ApiCheckStatus {
   updated_at: string
 }
 
-export interface GetMachineReq {
+/** Base req type to extend from */
+interface BaseMachineReq {
   machineId: string
 }
+
+export interface GetMachineReq extends BaseMachineReq {}
 
 export interface Timeout {
   'time.Duration': number
 }
 
-export interface RestartMachineReq extends GetMachineReq {
+export interface RestartMachineReq extends BaseMachineReq {
   timeout?: Timeout
 }
 
@@ -549,21 +552,23 @@ export interface StopMachineReq extends RestartMachineReq {
   signal?: Signal
 }
 
-export type StartMachineReq = GetMachineReq
+export interface StartMachineReq extends BaseMachineReq {}
 
-export interface SuspendMachineReq extends GetMachineReq {}
+export interface SuspendMachineReq extends BaseMachineReq {}
 
 export interface OkRes {
   ok: boolean
 }
 
-export interface DeleteMachineReq extends GetMachineReq {
-  // If true, the machine will be deleted even if it is in any other state than
-  // running
+export interface DeleteMachineReq extends BaseMachineReq {
+  /**
+   * If true, the machine will be deleted even if it is in any other state than
+   * running
+   */
   force?: boolean
 }
 
-export interface UpdateMachineReq extends GetMachineReq {
+export interface UpdateMachineReq extends BaseMachineReq {
   config: MachineConfig
   currentVersion?: string
   leaseTtl?: number
@@ -574,14 +579,14 @@ export interface UpdateMachineReq extends GetMachineReq {
   skipServiceRegistration?: boolean
 }
 
-export interface WaitMachineReq extends GetMachineReq {
+export interface WaitMachineReq extends BaseMachineReq {
   instance_id: string
   state?: WaitState
-  /** @default 60 (seconds) */
+  /** @default 60 */
   timeout?: string
 }
 
-export type GetLeaseReq = GetMachineReq
+export interface GetLeaseReq extends BaseMachineReq {}
 
 export interface LeaseRes {
   data: {
@@ -603,13 +608,13 @@ export interface DeleteLeaseReq extends GetLeaseReq {
   nonce: string
 }
 
-export type CordonMachineReq = GetMachineReq
+export interface CordonMachineReq extends BaseMachineReq {}
 
-export type UncordonMachineReq = GetMachineReq
+export interface UncordonMachineReq extends BaseMachineReq {}
 
-export type GetMetadataMachineReq = GetMachineReq
+export interface GetMetadataMachineReq extends BaseMachineReq {}
 
-export interface GetMetadataValMachineReq extends GetMachineReq {
+export interface GetMetadataValMachineReq extends BaseMachineReq {
   key: string
 }
 
@@ -617,13 +622,13 @@ export interface GetMetadataValMachineRes {
   value: string
 }
 
-export type GetMemoryReq = GetMachineReq
+export interface GetMemoryReq extends BaseMachineReq {}
 
-export interface SetMemoryReq extends GetMachineReq {
+export interface SetMemoryReq extends BaseMachineReq {
   limit_mb: number
 }
 
-export interface ReclaimMemoryReq extends GetMachineReq {
+export interface ReclaimMemoryReq extends BaseMachineReq {
   amount_mb: number
 }
 
@@ -636,18 +641,18 @@ export type MemoryRes = {
   limit_mb: number
 }
 
-export interface SetMetadataMachineReq extends GetMachineReq {
+export interface SetMetadataMachineReq extends BaseMachineReq {
   key: string
   value: Record<string, string>
 }
 
-export interface UpsertMetadataMachineReq extends GetMachineReq {
+export interface UpsertMetadataMachineReq extends BaseMachineReq {
   key: string
   updated_at: string
   value: string
 }
 
-export interface UpdateMetadataMachineReq extends GetMachineReq {
+export interface UpdateMetadataMachineReq extends BaseMachineReq {
   machine_version?: string
   metadata: Record<string, string>
   updated_at: string
@@ -659,13 +664,13 @@ export interface GetMetadataRes {
   [key: string]: string
 }
 
-export type ListMachineVersionsReq = GetMachineReq
+export interface ListMachineVersionsReq extends BaseMachineReq {}
 
-export interface SignalMachineReq extends GetMachineReq {
+export interface SignalMachineReq extends BaseMachineReq {
   signal: Signal
 }
 
-export interface ListProcessesReq extends GetMachineReq {
+export interface ListProcessesReq extends BaseMachineReq {
   order?: string
   sortBy?: string
 }
@@ -696,7 +701,7 @@ export interface ListEventsReq extends BaseMachineReq {
   limit?: number
 }
 
-export interface ExecMachineReq extends GetMachineReq {
+export interface ExecMachineReq extends BaseMachineReq {
   /** @deprecated Use `command` instead */
   cmd?: string
   command: string[]
