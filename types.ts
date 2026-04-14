@@ -318,6 +318,8 @@ export interface MachineImageRef extends Omit<ApiImageRef, 'labels'> {
 }
 
 export interface MachineConfig extends ApiMachineConfig {
+  // Define index signature to avoid missing index signature errors
+  [key: string]: unknown
   // The Docker image to run
   image: string
   // Optionally one of hourly, daily, weekly, monthly. Runs machine at the given
