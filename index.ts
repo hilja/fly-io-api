@@ -133,14 +133,7 @@ export class Machine {
   }: T.StopMachineReq): Promise<T.OkRes> {
     return this.#handleRes(
       await this.#fetch(
-        this.#post({
-          body: {
-            ...(signal && { signal }),
-            ...(timeout && { timeout }),
-          },
-          endpoint: 'stop',
-          machineId,
-        })
+        this.#post({ body: { signal, timeout }, endpoint: 'stop', machineId })
       )
     )
   }
@@ -610,12 +603,18 @@ export class Machine {
     endpoint?: T.Endpoints
     key?: string
     machineId?: string
+    /**
+     * POST can be used as a put, since put is a derivative of post
+     *
+     * @default post
+     */
     method?: 'post' | 'put'
   }) {
     const url = this.#getUrl({ machineId, endpoint, key })
 
     return new Request(url, {
-      ...(body && { body: JSON.stringify(body) }),
+      // Remove keys with undefined values
+      ...(body && { body: JSON.stringify(this.#filterUndefined(body)) }),
       headers: this.#headers(),
       method,
     })
@@ -634,5 +633,11 @@ export class Machine {
     }
 
     return headers
+  }
+
+  #filterUndefined<T extends Record<string, unknown>>(obj: T) {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([, value]) => value !== undefined)
+    )
   }
 }
