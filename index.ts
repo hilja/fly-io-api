@@ -595,7 +595,7 @@ export class Machine {
     endpoint?: T.Endpoints
     /**
      * DELETE doesn't really have params, except `force`, which we can abstract
-     * into arg
+     * to an arg
      *
      * @default false
      */
