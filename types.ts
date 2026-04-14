@@ -632,11 +632,11 @@ export interface ReclaimMemoryReq extends BaseMachineReq {
   amount_mb: number
 }
 
-export type ReclaimMemoryRes = {
+export interface ReclaimMemoryRes {
   actual_mb: number
 }
 
-export type MemoryRes = {
+export interface MemoryRes {
   available_mb: number
   limit_mb: number
 }
@@ -658,7 +658,7 @@ export interface UpdateMetadataMachineReq extends BaseMachineReq {
   updated_at: string
 }
 
-export type DeleteMachineMetadataReq = SetMetadataMachineReq
+export interface DeleteMachineMetadataReq extends SetMetadataMachineReq {}
 
 export interface GetMetadataRes {
   [key: string]: string
