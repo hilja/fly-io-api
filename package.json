@@ -1,6 +1,6 @@
 {
   "name": "fly-io-api",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "TypeScript package to interact with Fly.io machines api",
   "keywords": [
     "fly.io",
