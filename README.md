@@ -10,21 +10,23 @@ pnpm add fly-io-api
 
 ## Usage
 
+Get `machinesId`s and do something with them:
+
 ```ts
 import { Machine } from './index.ts'
 
-const myApp = new Machine(process.env['FLY_API_TOKEN']!, 'my_app')
+const myApp = new Machine('my_app', process.env['FLY_API_TOKEN']!)
 
 const stopped: string[] = []
 for (const machine of await myApp.list()) {
   if (machine.state === 'stopped') stopped.push(machine.id)
 }
 
-// Start the machines for example
+console.log(`Starting machines: ${stopped.join(', ')}`)
 await Promise.all(stopped.map(machineId => myApp.start({ machineId })))
 ```
 
-The origin is set from `process.env.NODE_ENV`, but you can have your own:
+The origin is set based on `process.env.NODE_ENV`, but you can have your own:
 
 ```ts
 const origin =
@@ -32,14 +34,16 @@ const origin =
     ? 'http://_api.internal:4280'
     : 'https://api.machines.dev'
 
-new Machine(process.env['FLY_API_TOKEN']!, 'foo', origin)
+const myApp = new Machine('my_app', process.env['FLY_API_TOKEN']!, origin)
 ```
 
-Sorry no real docs yet, check `index.ts`, `index.test.ts` or see:
+There's no real docs yet, but check `index.ts`, or the tests file
+`index.test.ts`. Or one of these resources:
 
-- Fly OpenAPI Scalar docs: [https://docs.machines.dev/](docs.machines.dev)
-- Or the:
-  [main docs site](https://fly.io/docs/machines/api/machines-resource/#add-or-update-machine-metadata)
+- Fly OpenAPI spec: [docs.machines.dev](https://docs.machines.dev/)
+- API docs: [fly.io/docs/machines/api](https://fly.io/docs/machines/api/)
+- Guide article:
+  [Managing Machines with the Machines API](https://fly.io/docs/machines/guides-examples/managing-machines-with-the-api/)
 
 ## Development
 
